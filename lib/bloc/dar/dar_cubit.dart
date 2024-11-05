@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/dar/dar_state.dart';
+import 'package:login/model/menuDar.dart';
 import 'package:login/model/task.dart';
 import 'package:login/model/user.dart';
 import 'package:login/screens/components/showDialog.dart';
+import 'package:login/screens/dar/aktivitas.dart';
+import 'package:login/screens/dar/dashboard.dart';
+import 'package:login/screens/dar/paket.dart';
 import 'package:login/services/service.dart';
 import 'package:login/utils/constants/constantVar.dart';
 import 'package:login/utils/helper/helper.dart';
@@ -49,6 +53,18 @@ class DarCubit extends Cubit<DarState> {
       emit(state.copyWith(
           isLoading: false, errorMessage: 'Failed to load data'));
     }
+  }
+
+  Future<void> initMenu() async {
+    emit(state.copyWith(currentScreen: 'Dashboard', listMenu: [
+      MenuDar(title: "Dashboard", icon: const Icon(Icons.dashboard), screen: const DashboardDar()),
+      MenuDar(title: "Aktivitas", icon: const Icon(Icons.timeline), screen: const Aktivitas()),
+      MenuDar(title: "Dashboard Paket", icon: const Icon(Icons.card_giftcard), screen: const Paket())
+    ]));
+  }
+
+  void navigateTo(String menu, int i) {
+    emit(state.copyWith(currentScreen: menu, indexMenu: i));
   }
 
   void updateStatus(int? id, String newStatus) {

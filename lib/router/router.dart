@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:login/router/app_routes.dart';
-import 'package:login/screens/dar_screen.dart';
+import 'package:login/screens/dar/dar_screen.dart';
+import 'package:login/screens/dar/dashboard.dart';
+import 'package:login/screens/dar/aktivitas.dart';
+import 'package:login/screens/dashboard_screen.dart';
 import 'package:login/screens/login_screen.dart';
 import 'package:login/screens/mainpage_screen.dart';
 
