@@ -17,6 +17,18 @@ class Helper {
     await storage.delete(key: 'auth_token');
   }
 
+  Future<void> saveExpiredToken(String expiredToken) async {
+    await storage.write(key: 'expired_token', value: expiredToken);
+  }
+
+  Future<String?> getExpiredToken() async {
+    return await storage.read(key: 'expired_token');
+  }
+
+  Future<void> deleteExpiredToken() async {
+    await storage.delete(key: 'expired_token');
+  }
+
   Future<void> saveDataUser(String data) async {
     final SharedPreferences prefs = await prefs0;
     prefs.setString('user', data);

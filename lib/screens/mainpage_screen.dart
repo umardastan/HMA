@@ -30,6 +30,11 @@ class _MainpageScreenState extends State<MainpageScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -65,6 +70,7 @@ class _MainpageScreenState extends State<MainpageScreen> {
           await Helper().deleteDataUser();
           await Helper().deleteToken();
           await Helper().deleteInitialLocation();
+          // await Helper().deleteExpiredToken();
           SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         } else {
           print('Cancelled exit.');

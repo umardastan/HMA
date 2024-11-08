@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -15,9 +13,11 @@ class Request {
       String? token,
       required String method}) async {
     final url = Uri.https(Url.base, path, params);
+    print('ini urlnya ==> $url');
     try {
       switch (method) {
         case 'post':
+          print('masuk method POST');
           var response = await http.post(url,
               headers: {
                 'Content-Type': 'application/json',
@@ -26,6 +26,7 @@ class Request {
               body: jsonEncode(body ?? ''));
           return response;
         case 'get':
+        print('masuk method GET');
           var response = await http.get(
             url,
             headers: {
@@ -50,6 +51,4 @@ class Request {
     }
     return null;
   }
-
-  
 }

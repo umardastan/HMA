@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/dar/dar_cubit.dart';
@@ -30,6 +32,15 @@ class _DarScreenState extends State<DarScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(state.currentScreen),
+            actions: [
+              if (Platform.isIOS) // Menampilkan IconButton hanya di iOS
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back_ios),
+                ),
+            ],
           ),
           drawer: Drawer(
             child: ListView(
@@ -64,11 +75,13 @@ class _DarScreenState extends State<DarScreen> {
                       },
                     );
                   },
-                )
+                ),
               ],
             ),
           ),
-          body: state.listMenu.isEmpty ? Container() : state.listMenu[state.indexMenu].screen,
+          body: state.listMenu.isEmpty
+              ? Container()
+              : state.listMenu[state.indexMenu].screen,
         );
       }),
     );

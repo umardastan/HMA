@@ -1,6 +1,6 @@
 import 'package:login/model/user.dart';
 
-class Task {
+class Aktivitas {
   int? id;
   String? task;
   int? assignedBy;
@@ -12,7 +12,7 @@ class Task {
   String? updatedAt;
   // User? user;
 
-  Task(
+  Aktivitas(
       {this.id,
       this.task,
       this.assignedBy,
@@ -25,7 +25,7 @@ class Task {
       // this.user
       });
 
-  Task.fromJson(Map<String, dynamic> json) {
+  Aktivitas.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     task = json['task'];
     assignedBy = json['assigned_by'];

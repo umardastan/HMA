@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:login/utils/constants/colors.dart';
 // import 'package:form_field_validator/form_field_validator.dart';
 
@@ -38,18 +39,18 @@ class ConstantStyle {
   );
 
   //Style Text
-  static const textS = TextStyle(fontSize: 10, color: ColorApp.dark);
+  static const textS = TextStyle(fontSize: 10, color: Colors.black);
   static const textSB = TextStyle(
-      fontSize: 10, fontWeight: FontWeight.bold, color: ColorApp.dark);
-  static const textM = TextStyle(fontSize: 12, color: ColorApp.dark);
+      fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black);
+  static const textM = TextStyle(fontSize: 12, color: Colors.black);
   static const textMB = TextStyle(
-      fontSize: 12, fontWeight: FontWeight.bold, color: ColorApp.dark);
-  static const textL = TextStyle(fontSize: 16, color: ColorApp.dark);
+      fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black);
+  static const textL = TextStyle(fontSize: 16, color: Colors.black);
   static const textLB = TextStyle(
-      fontSize: 16, fontWeight: FontWeight.bold, color: ColorApp.dark);
-  static const textXL = TextStyle(fontSize: 20, color: ColorApp.dark);
+      fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black);
+  static const textXL = TextStyle(fontSize: 20, color: Colors.black);
   static const textXLB = TextStyle(
-      fontSize: 20, fontWeight: FontWeight.bold, color: ColorApp.dark);
+      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black);
 
   //Style
   static final borderFormInput = OutlineInputBorder(
@@ -184,16 +185,15 @@ class ConstantStyle {
 
   static InputDecoration inputDecorationDefault(String text) {
     return InputDecoration(
-
       counterText: '',
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       labelText: text,
-      labelStyle: const TextStyle(fontSize: 12, color: ColorApp.dark),
+      labelStyle: const TextStyle(fontSize: 12, color: ColorApp.basic),
       enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: ColorApp.light),
+          borderSide: const BorderSide(color: ColorApp.basic),
           borderRadius: BorderRadius.circular(20)),
       focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 2.0, color: ColorApp.dark),
+          borderSide: const BorderSide(width: 2.0, color: ColorApp.button),
           borderRadius: BorderRadius.circular(10)),
       // fillColor: ColorApp.appBar,
       // filled: true,
@@ -214,6 +214,15 @@ class ConstantStyle {
       // fillColor: ColorApp.appBar,
       // filled: true,
       // prefixStyle: const TextStyle(color: Colors.yellow),
+    );
+  }
+
+  static TextStyle defaultTextStyle(
+      {double fontSize = 12, FontWeight? fontWeight, Color? color}) {
+    return GoogleFonts.poppins(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
     );
   }
 }

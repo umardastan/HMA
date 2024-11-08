@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:login/model/user.dart';
 
 class MenuDar {
   String? title;

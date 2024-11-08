@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -22,29 +20,58 @@ class LoginCubit extends Cubit<LoginState> {
       "username": username,
       "password": password,
     };
-    var response =
-        await Request.req(
-          path: PathUrl.login, params: null, body:body, token: null, method: 'post');
-    var result = json.decode(response!.body);
+    try {
+      var response = await Request.req(
+          path: PathUrl.login,
+          params: null,
+          body: body,
+          token: null,
+          method: 'post');
+      var result = json.decode(response!.body);
 
-    // await Future.delayed(const Duration(seconds: 2));
-    // final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
-    // final SharedPreferences prefs = await prefs0;
-    // response.statusCode == 200
-    if (response.statusCode == 200 ) {
-      Helper().saveToken(result['token']);
-      Helper().saveDataUser(jsonEncode(result['data']));
-      Helper().saveInitialLocation("/${Routes.MAINPAGE}");
+      // await Future.delayed(const Duration(seconds: 2));
+      // final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
+      // final SharedPreferences prefs = await prefs0;
+      // response.statusCode == 200
+      if (response.statusCode == 200) {
+        Helper().saveToken(result['token']);
+        Helper().saveExpiredToken(result['expires_at']);
+        var id = result['data']['id'];
+        var token = result['token'];
+        try {
+          var response = await Request.req(
+              path: "${PathUrl.getUserById}$id",
+              params: null,
+              body: body,
+              token: token,
+              method: 'get');
+          var result = json.decode(response!.body);
+          if (response.statusCode == 200 && result['success'] == true) {
+            Helper().saveDataUser(jsonEncode(result['data']));
+          } else {
+            emit(state.copyWith(
+                isLoading: false, errorMessage: 'Gagal Get Data User By ID'));
+            emit(state.copyWith(errorMessage: ''));
+          }
+        } catch (e) {
+          print('error get user By ID');
+          print(e);
+        }
+        // Helper().saveDataUser(jsonEncode(result['data']));
+        Helper().saveInitialLocation("/${Routes.MAINPAGE}");
 
-      emit(state.copyWith(isLoading: false, isSuccess: true));
-      if(context.mounted){
-        context.go("/${Routes.MAINPAGE}");
+        emit(state.copyWith(isLoading: false, isSuccess: true));
+        if (context.mounted) {
+          context.go("/${Routes.MAINPAGE}");
+        }
+      } else {
+        emit(state.copyWith(
+            isLoading: false,
+            errorMessage: 'Login gagal. Username atau password salah.'));
+        emit(state.copyWith(errorMessage: ''));
       }
-    } else {
-      emit(state.copyWith(
-          isLoading: false,
-          errorMessage: 'Login gagal. Username atau password salah.'));
-      emit(state.copyWith(errorMessage: ''));
+    } catch (e) {
+      print(e);
     }
   }
 }

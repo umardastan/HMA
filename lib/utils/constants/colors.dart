@@ -12,6 +12,7 @@ class ColorApp {
   static const int basicColor = 0xff771d1d;
   static const int secondaryColor = 0xffa53333;
   static const int thirdColor = 0xff771d47;
+  static const int buttonColor = 0xFF3D0301;
 
   static const Color dark = Color(darkColor);
   static const Color softDark = Color(softDarkColor);
@@ -20,6 +21,7 @@ class ColorApp {
   static const Color basic = Color(basicColor);
   static const Color secondary = Color(secondaryColor);
   static const Color third = Color(thirdColor);
+  static const Color button = Color(buttonColor);
 
   // Color Style for text
   static const Color textColor = Color(0XFFd6a51f);
