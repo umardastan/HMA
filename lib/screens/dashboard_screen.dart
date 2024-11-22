@@ -2,12 +2,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:login/bloc/dashboard/dahsboard_cubit.dart';
 import 'package:login/bloc/dashboard/dashboard_state.dart';
 import 'package:login/screens/components/dashboard_card.dart';
-import 'package:login/utils/helper/helper.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -25,6 +22,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // profileCubit = BlocProvider.of<ProfileCubit>(context); // untuk
     dashboardCubit = context.read<DashboardCubit>();
     dashboardCubit.cekExpiredToken();
+    dashboardCubit.initRole();
   }
 
   @override
@@ -56,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }, builder: (context, state) {
       return Scaffold(
           body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -70,22 +68,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: state.menu.asMap().entries.map((entry) {
                     int index = entry.key;
                     var item = entry.value;
+                    // Kondisi untuk mengabaikan item jika role == '4' dan title == 'Management Users'
+                    if (state.role == '4' && item.title == "Management Users") {
+                      return const SizedBox
+                          .shrink(); // Mengembalikan widget kosong
+                    }
                     return AnimationConfiguration.staggeredList(
                       position: index,
                       duration: const Duration(milliseconds: 1000),
                       child: SlideAnimation(
                         curve: Curves.bounceIn,
                         verticalOffset: 100.0,
-                        child: DashboardCard(
-                            icon: item.icon,
-                            title: item.title,
-                            subtitle: '',
-                            color: item.color,
-                            onClick: () {
-                              context
-                                  .read<DashboardCubit>()
-                                  .clickMenu(item.title, context);
-                            }),
+                        child: // atur disini
+                            DashboardCard(
+                                icon: item.icon,
+                                title: item.title,
+                                subtitle: '',
+                                color: item.color,
+                                onClick: () {
+                                  context
+                                      .read<DashboardCubit>()
+                                      .clickMenu(item.title, context);
+                                }),
                       ),
                     );
                   }).toList(),

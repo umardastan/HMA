@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:login/bloc/login/login_cubit.dart';
 import 'package:login/bloc/login/login_state.dart';
-import 'package:login/screens/components/custom_snackbar.dart';
 import 'package:login/utils/constants/colors.dart';
 
 import 'components/text_input.dart';

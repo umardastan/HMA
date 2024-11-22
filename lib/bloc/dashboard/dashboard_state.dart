@@ -9,6 +9,7 @@ class DashboardState extends Equatable {
   final List<Menu> menu;
   final bool isExpired;
   final String errorMessage;
+  final String role;
 
   DashboardState({
     this.isStartAnimation = false,
@@ -17,6 +18,7 @@ class DashboardState extends Equatable {
     List<Menu>? menu,
     this.isExpired = false,
     this.errorMessage = '',
+    this.role = '',
   })  : // Beri nilai default di sini jika chartData null
         userData = userData ??
             [
@@ -33,6 +35,8 @@ class DashboardState extends Equatable {
                   Icons.request_quote_outlined, 'ATK Permintaan', Colors.green),
               Menu(Icons.shopping_cart, 'CA', Colors.blue),
               Menu(Icons.event, 'Event', Colors.teal),
+              Menu(Icons.manage_accounts, 'Management Users',
+                  Color.fromARGB(255, 174, 5, 22)),
             ];
 
   DashboardState copyWith({
@@ -41,6 +45,7 @@ class DashboardState extends Equatable {
     List<Menu>? menu,
     bool? isExpired,
     String? errorMessage,
+    String? role,
   }) {
     return DashboardState(
       isStartAnimation: isStartAnimation ?? this.isStartAnimation,
@@ -48,12 +53,13 @@ class DashboardState extends Equatable {
       menu: menu ?? this.menu,
       isExpired: isExpired ?? this.isExpired,
       errorMessage: errorMessage ?? this.errorMessage,
+      role: role ?? this.role,
     );
   }
 
   @override
   List<Object> get props =>
-      [isStartAnimation, isResetAnimation, menu, isExpired, errorMessage];
+      [isStartAnimation, isResetAnimation, menu, isExpired, errorMessage, role];
 }
 // class User {
 //   const User(this.nama, this.umur);

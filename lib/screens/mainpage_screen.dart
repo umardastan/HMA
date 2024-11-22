@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-import 'package:login/router/app_routes.dart';
 import 'package:login/screens/dashboard_screen.dart';
 import 'package:login/screens/profile_screen.dart';
 import 'package:login/utils/helper/helper.dart';

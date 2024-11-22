@@ -4,9 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:login/bloc/dar/dar_cubit.dart';
 import 'package:login/bloc/dar/dar_state.dart';
-import 'package:login/bloc/dashboard/dashboard_state.dart';
-import 'package:login/screens/dar/components/task_pie_chart.dart';
-import 'package:login/utils/constants/colors.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DashboardDar extends StatefulWidget {
@@ -92,7 +89,10 @@ class _DashboardDarState extends State<DashboardDar> {
                                 );
                               }).toList(),
                             ),
-                            const Gap(16),
+                            // const Gap(16),
+                            const Gap(5),
+                            const Divider(thickness: 2, color: Colors.white,),
+                            const Gap(5),
                             Text(
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,

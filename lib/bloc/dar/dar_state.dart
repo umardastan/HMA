@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:login/model/dashboard_dar.dart';
+import 'package:login/model/dashboard_paket.dart';
 import 'package:login/model/menu_dar.dart';
 import 'package:login/model/aktivitas.dart';
 import 'package:login/model/user.dart';
@@ -25,6 +26,11 @@ class DarState extends Equatable {
   final DateFormat dateFormat;
   final String fromDate;
   final String toDate;
+  final List<DashboardPaketModel> listDashboardPaket;
+  final int selectedIdUser;
+  final String role;
+  final List<User> users;
+  final User? selectedUserForTask;
 
   DarState({
     User? user,
@@ -45,6 +51,11 @@ class DarState extends Equatable {
     DateFormat? dateFormat,
     final String? fromDate,
     final String? toDate,
+    List<DashboardPaketModel>? listDashboardPaket,
+    this.selectedIdUser = 0,
+    this.role = '',
+    List<User>? users,
+    this.selectedUserForTask,
   })  : user = user ?? User(),
         task = task ?? Aktivitas(),
         dataDashboard = dataDashboard ?? DashboardModel(),
@@ -72,9 +83,12 @@ class DarState extends Equatable {
             ),
         dateFormat = dateFormat ?? DateFormat('yyyy-MM-dd'),
         fromDate = fromDate ??
-            DateFormat('yyyy-MM-dd').format(
-                DateTime.now().subtract(const Duration(days: 0))), // 7 hari yang lalu
-        toDate = toDate ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
+            DateFormat('yyyy-MM-dd').format(DateTime.now()
+                .subtract(const Duration(days: 0))), // 7 hari yang lalu
+        toDate = toDate ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        listDashboardPaket = listDashboardPaket ?? <DashboardPaketModel>[],
+        users = users ?? <User>[];
+        // selectedUserForTask = selectedUserForTask ?? User();
 
   DarState copyWith({
     User? user,
@@ -96,6 +110,11 @@ class DarState extends Equatable {
     DateFormat? dateFormat,
     String? fromDate,
     String? toDate,
+    List<DashboardPaketModel>? listDashboardPaket,
+    int? selectedIdUser,
+    String? role,
+    List<User>? users,
+    User? selectedUserForTask,
   }) {
     return DarState(
       user: user ?? this.user,
@@ -117,11 +136,16 @@ class DarState extends Equatable {
       dateFormat: dateFormat ?? this.dateFormat,
       fromDate: fromDate ?? this.fromDate,
       toDate: toDate ?? this.toDate,
+      listDashboardPaket: listDashboardPaket ?? this.listDashboardPaket,
+      selectedIdUser: selectedIdUser ?? this.selectedIdUser,
+      role: role ?? this.role,
+      users: users ?? this.users,
+      selectedUserForTask: selectedUserForTask ?? this.selectedUserForTask,
     );
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         user,
         task,
         isLoading,
@@ -140,6 +164,11 @@ class DarState extends Equatable {
         dateFormat,
         fromDate,
         toDate,
+        listDashboardPaket,
+        selectedIdUser,
+        role,
+        users,
+        selectedUserForTask
       ];
 }
 

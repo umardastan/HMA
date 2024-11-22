@@ -39,13 +39,13 @@ class Request {
       }
     } on Exception catch (e) {
       if (e is ClientException) {
-        Map body = {"message": e.message};
+        Map body = {"message": e.message.toString()};
         return Response(jsonEncode(body), 400);
       } else if (e is SocketException) {
-        Map body = {"message": e.message};
+        Map body = {"message": e.message.toString()};
         return Response(jsonEncode(body), 400);
       } else {
-        Map body = {"message": e};
+        Map body = {"message": e.toString()};
         return Response(jsonEncode(body), 400);
       }
     }

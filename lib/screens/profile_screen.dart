@@ -2,18 +2,14 @@ import 'package:accordion/accordion.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login/bloc/profile/profile_cubit.dart';
 import 'package:login/bloc/profile/profile_state.dart';
-import 'package:login/router/app_routes.dart';
 import 'package:login/screens/components/buildInfoCard.dart';
 import 'package:login/screens/components/default_button.dart';
 import 'package:login/utils/constants/colors.dart';
 import 'package:login/utils/constants/constantStyle.dart';
-import 'package:login/utils/helper/helper.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -102,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           ).show();
         }
 
-        if(state.errorMessage.isNotEmpty){
+        if (state.errorMessage.isNotEmpty) {
           AwesomeDialog(
             context: context,
             dialogType: DialogType.error,
@@ -134,6 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // Text(state.user.toString()),
                     // Header
                     Container(
                       width: double.infinity,
@@ -269,16 +266,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                                         'Project Leader',
                                         style: ConstantStyle.textLB,
                                       ),
-                                      Text(state.user.projectLeader ?? '-'),
+                                      Text(state.user.projectLeader == null ? "Kosong" : state.user.projectLeader!.paketId.toString()),
                                       const Gap(10),
                                       const Text(
                                         'Paket',
                                         style: ConstantStyle.textLB,
                                       ),
-                                      // Text(state.user.pivotPakets!.isNotEmpty
-                                      //     ? state
-                                      //         .user.pivotPakets![0].pakets!.judul!
-                                      //     : 'Belum Ada')
+                                      state.user.pivotPakets == null
+                                          ? const Text("Kosong")
+                                          : Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: state.user.pivotPakets!
+                                                  .map<Widget>((item) {
+                                                return Text(item.pakets!.judul!);
+                                              }).toList(),
+                                            )
                                     ],
                                   ),
                                   onOpenSection: () =>

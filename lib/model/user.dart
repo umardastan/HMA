@@ -1,3 +1,6 @@
+import 'package:login/model/paket.dart';
+import 'package:login/model/role.dart';
+
 class User {
   int? id;
   String? nik;
@@ -20,9 +23,9 @@ class User {
   int? loginIzin;
   int? loginEvent;
   int? loginCa;
-  String? projectLeader;
+  ProjectLeader? projectLeader;
   List<PivotPakets>? pivotPakets;
-  Roles? roles;
+  Role? roles;
 
   User(
       {this.id,
@@ -72,14 +75,16 @@ class User {
     loginIzin = json['login_izin'];
     loginEvent = json['login_event'];
     loginCa = json['login_ca'];
-    projectLeader = json['project_leader'];
+    projectLeader = json['project_leader'] != null
+        ? ProjectLeader.fromJson(json['project_leader'])
+        : null;
     if (json['pivot_pakets'] != null) {
       pivotPakets = <PivotPakets>[];
       json['pivot_pakets'].forEach((v) {
         pivotPakets!.add(PivotPakets.fromJson(v));
       });
     }
-    roles = json['roles'] != null ? Roles.fromJson(json['roles']) : null;
+    roles = json['roles'] != null ? Role.fromJson(json['roles']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -105,7 +110,9 @@ class User {
     data['login_izin'] = loginIzin;
     data['login_event'] = loginEvent;
     data['login_ca'] = loginCa;
-    data['project_leader'] = projectLeader;
+    if (projectLeader != null) {
+      data['project_leader'] = projectLeader!.toJson();
+    }
     if (pivotPakets != null) {
       data['pivot_pakets'] = pivotPakets!.map((v) => v.toJson()).toList();
     }
@@ -142,8 +149,7 @@ class PivotPakets {
     paketId = json['paket_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    pakets =
-        json['pakets'] != null ? Pakets.fromJson(json['pakets']) : null;
+    pakets = json['pakets'] != null ? Pakets.fromJson(json['pakets']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -164,90 +170,77 @@ class PivotPakets {
       "id: $id, user_id: $userId, paket_id: $paketId, created_at: $createdAt, updated_at: $updatedAt, pakets: $pakets";
 }
 
-class Pakets {
+// class Roles {
+//   int? id;
+//   String? role;
+//   String? description;
+//   String? createdAt;
+//   String? updatedAt;
+
+//   Roles({this.id, this.role, this.description, this.createdAt, this.updatedAt});
+
+//   Roles.fromJson(Map<String, dynamic> json) {
+//     id = json['id'];
+//     role = json['role'];
+//     description = json['description'];
+//     createdAt = json['created_at'];
+//     updatedAt = json['updated_at'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['id'] = id;
+//     data['role'] = role;
+//     data['description'] = description;
+//     data['created_at'] = createdAt;
+//     data['updated_at'] = updatedAt;
+//     return data;
+//   }
+
+//   @override
+//   toString() => "id: $id, role: $role, description: $description";
+// }
+
+class ProjectLeader {
   int? id;
-  String? kodePaket;
-  String? judul;
-  String? tahun;
+  int? userId;
+  int? paketId;
   String? createdAt;
   String? updatedAt;
-  String? deletedAt;
-  String? keterangan;
-  String? tglDeadline;
-  String? kendala;
+  Pakets? pakets;
 
-  Pakets(
-      {this.id,
-      this.kodePaket,
-      this.judul,
-      this.tahun,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt,
-      this.keterangan,
-      this.tglDeadline,
-      this.kendala});
+  ProjectLeader({
+    this.id,
+    this.userId,
+    this.paketId,
+    this.createdAt,
+    this.updatedAt,
+    this.pakets,
+  });
 
-  Pakets.fromJson(Map<String, dynamic> json) {
+  ProjectLeader.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    kodePaket = json['kode_paket'];
-    judul = json['judul'];
-    tahun = json['tahun'];
+    userId = json['user_id'];
+    paketId = json['paket_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
-    keterangan = json['keterangan'];
-    tglDeadline = json['tgl_deadline'];
-    kendala = json['kendala'];
+    pakets =
+        json['pakets'] != null ? Pakets.fromJson(json['pakets']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['kode_paket'] = kodePaket;
-    data['judul'] = judul;
-    data['tahun'] = tahun;
+    data['user_id'] = userId;
+    data['paket_id'] = paketId;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    data['deleted_at'] = deletedAt;
-    data['keterangan'] = keterangan;
-    data['tgl_deadline'] = tglDeadline;
-    data['kendala'] = kendala;
+    if (pakets != null) {
+      data['pakets'] = pakets!.toJson();
+    }
     return data;
   }
 
   @override
-  toString() =>
-      "id: $id, kode_paket: $kodePaket, judul: $judul, tahun: $tahun, keterangan: $keterangan, tgl_deadline: $tglDeadline, kendala: $kendala";
-}
-
-class Roles {
-  int? id;
-  String? role;
-  String? description;
-  String? createdAt;
-  String? updatedAt;
-
-  Roles({this.id, this.role, this.description, this.createdAt, this.updatedAt});
-
-  Roles.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    role = json['role'];
-    description = json['description'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['role'] = role;
-    data['description'] = description;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    return data;
-  }
-  @override
-  toString() =>
-      "id: $id, role: $role, description: $description";
+  toString() => '{id: $id, userId: $userId, paketId: $paketId, paket: $pakets}';
 }

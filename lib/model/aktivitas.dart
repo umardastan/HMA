@@ -1,3 +1,4 @@
+
 import 'package:login/model/user.dart';
 
 class Aktivitas {
@@ -10,7 +11,7 @@ class Aktivitas {
   String? status;
   String? createdAt;
   String? updatedAt;
-  // User? user;
+  User? user;
 
   Aktivitas(
       {this.id,
@@ -22,7 +23,7 @@ class Aktivitas {
       this.status,
       this.createdAt,
       this.updatedAt,
-      // this.user
+      this.user
       });
 
   Aktivitas.fromJson(Map<String, dynamic> json) {
@@ -35,7 +36,7 @@ class Aktivitas {
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    // user = json['user'] != null ? User.fromJson(json['user']) : null;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -49,9 +50,9 @@ class Aktivitas {
     data['status'] = status;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    // if (user != null) {
-    //   data['user'] = user!.toJson(user!);
-    // }
+    if (user != null) {
+      data['user'] = user!.toJson();
+    }
     return data;
   }
 

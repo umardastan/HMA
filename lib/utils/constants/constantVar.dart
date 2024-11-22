@@ -17,4 +17,12 @@ class PathUrl {
   static const getUserById = '/list-user/';
   static const updateUser = '/update-user/';
   static const updatePassword = '/update-password/';
+  static const dashboardPaket = '/my-paket-progres';
+  static const taskList = '/task/list-task';
+  static const users = '/list-user';
+  static const listRole = '/list-role';
+  static const listPaket = '/list-paket';
+  static const createUser = '/create-user';
 }
+
+enum MessageType { success, error, warning, info }

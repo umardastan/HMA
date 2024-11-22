@@ -1,12 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login/model/user.dart';
 import 'package:login/router/app_routes.dart';
 import 'package:login/screens/dar/dar_screen.dart';
-import 'package:login/screens/dar/dashboard.dart';
-import 'package:login/screens/dar/aktivitas.dart';
-import 'package:login/screens/dashboard_screen.dart';
 import 'package:login/screens/login_screen.dart';
 import 'package:login/screens/mainpage_screen.dart';
+import 'package:login/screens/management_users_screen.dart/add_edit_user_screen.dart';
+import 'package:login/screens/management_users_screen.dart/management_users_screen.dart';
 
 GoRouter router(String initialLocation) {
   return GoRouter(
@@ -25,7 +27,26 @@ GoRouter router(String initialLocation) {
                 GoRoute(
                   path: Routes.DAR,
                   builder: (context, state) => const DarScreen(),
-                )
+                ),
+                GoRoute(
+                    path: Routes.MANAGEMENTUSERS,
+                    builder: (context, state) => const ManagementUsersScreen(),
+                    routes: [
+                      GoRoute(
+                          path: "${Routes.ADDEDITUSERSCREEN}/:isEditing",
+                          builder: (context, state) {
+                            String userString = jsonEncode(state.extra);
+                            User user = User.fromJson(jsonDecode(userString));
+                            print(user);
+                            final isEditing =
+                                state.pathParameters['isEditing'] == 'true';
+
+                            return AddEditUserScreen(
+                              isEditing: isEditing,
+                              user: user
+                            );
+                          }),
+                    ])
               ]),
         ],
       ),

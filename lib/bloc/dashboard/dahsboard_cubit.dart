@@ -25,6 +25,9 @@ class DashboardCubit extends Cubit<DashboardState> {
       case 'DAR':
         context.go("/${Routes.MAINPAGE}/${Routes.DAR}");
         break;
+      case 'Management Users':
+        context.go("/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}");
+        break;
       default:
         cShowDialog(
             context: context, title: "Warning", message: 'Under Maintenance');
@@ -47,6 +50,11 @@ class DashboardCubit extends Cubit<DashboardState> {
 
     // Bandingkan expiredDate dengan waktu sekarang
     emit(state.copyWith(isExpired: now.isAfter(expiredDate)));
+  }
+
+  Future<void> initRole() async {
+    String? role = await Helper().getRole();
+    emit(state.copyWith(role: role));
   }
 
   Future<void> logout(BuildContext context) async {

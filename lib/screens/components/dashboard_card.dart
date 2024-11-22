@@ -1,8 +1,5 @@
 import 'package:bounce/bounce.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:login/router/app_routes.dart';
-import 'package:login/screens/components/showDialog.dart';
 
 class DashboardCard extends StatelessWidget {
   final IconData icon;

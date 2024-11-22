@@ -28,6 +28,8 @@ class LoginCubit extends Cubit<LoginState> {
           token: null,
           method: 'post');
       var result = json.decode(response!.body);
+      print(response.statusCode);
+      print(result);
 
       // await Future.delayed(const Duration(seconds: 2));
       // final Future<SharedPreferences> prefs0 = SharedPreferences.getInstance();
@@ -36,6 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
       if (response.statusCode == 200) {
         Helper().saveToken(result['token']);
         Helper().saveExpiredToken(result['expires_at']);
+        Helper().saveRole(result['data']['role']);
         var id = result['data']['id'];
         var token = result['token'];
         try {
@@ -64,10 +67,13 @@ class LoginCubit extends Cubit<LoginState> {
         if (context.mounted) {
           context.go("/${Routes.MAINPAGE}");
         }
+      }
+      if (response.statusCode == 400) {
+        emit(state.copyWith(isLoading: false, errorMessage: result['message']));
+        emit(state.copyWith(errorMessage: ''));
       } else {
-        emit(state.copyWith(
-            isLoading: false,
-            errorMessage: 'Login gagal. Username atau password salah.'));
+        print('masuk sini');
+        emit(state.copyWith(isLoading: false, errorMessage: result['error']));
         emit(state.copyWith(errorMessage: ''));
       }
     } catch (e) {

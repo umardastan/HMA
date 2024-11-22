@@ -17,6 +17,18 @@ class Helper {
     await storage.delete(key: 'auth_token');
   }
 
+  Future<void> saveRole(String role) async {
+    await storage.write(key: 'role', value: role);
+  }
+
+  Future<String?> getRole() async {
+    return await storage.read(key: 'role');
+  }
+
+  Future<void> deleteRole() async {
+    await storage.delete(key: 'role');
+  }
+
   Future<void> saveExpiredToken(String expiredToken) async {
     await storage.write(key: 'expired_token', value: expiredToken);
   }
@@ -71,4 +83,6 @@ class Helper {
     }
     return null;
   }
+
+  
 }
