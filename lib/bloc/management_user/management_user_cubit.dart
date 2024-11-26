@@ -6,7 +6,6 @@ import 'package:login/bloc/management_user/management_user_state.dart';
 import 'package:login/model/paket.dart';
 import 'package:login/model/role.dart';
 import 'package:login/model/user.dart';
-import 'package:login/screens/components/showDialog.dart';
 import 'package:login/services/service.dart';
 import 'package:login/utils/constants/constantVar.dart';
 import 'package:login/utils/helper/helper.dart';
@@ -18,7 +17,7 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
   ManagementUserCubit() : super(ManagementUserState());
 
   Future<void> initDataUsers() async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isFetchData: true));
     try {
       String? token = await Helper().getToken();
       if (token != null) {
@@ -41,23 +40,23 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
                   })
                   .toList()
                   .cast<User>(),
-              isLoading: false,
+              isFetchData: false,
             ),
           );
           loadData(state.listUser);
         } else {
-          emit(state.copyWith(isLoading: false));
+          emit(state.copyWith(isFetchData: false));
         }
       } else {
-        emit(state.copyWith(isLoading: false, isSuccess: false));
+        emit(state.copyWith(isFetchData: false, isSuccess: false));
       }
     } catch (e) {
-      emit(state.copyWith(isLoading: false, message: 'Failed to load data'));
+      emit(state.copyWith(isFetchData: false, message: 'Failed to load data'));
     }
   }
 
   Future<void> initDataPakets() async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isFetchData: true));
     try {
       String? token = await Helper().getToken();
       if (token != null) {
@@ -77,22 +76,22 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
                   })
                   .toList()
                   .cast<Pakets>(),
-              isLoading: false,
+              isFetchData: false,
             ),
           );
         } else {
-          emit(state.copyWith(isLoading: false));
+          emit(state.copyWith(isFetchData: false));
         }
       } else {
-        emit(state.copyWith(isLoading: false, isSuccess: false));
+        emit(state.copyWith(isFetchData: false, isSuccess: false));
       }
     } catch (e) {
-      emit(state.copyWith(isLoading: false, message: 'Failed to load data'));
+      emit(state.copyWith(isFetchData: false, message: 'Failed to load data'));
     }
   }
 
   Future<void> initDataRoles() async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isFetchData: true));
     try {
       String? token = await Helper().getToken();
       if (token != null) {
@@ -112,17 +111,17 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
                   })
                   .toList()
                   .cast<Role>(),
-              isLoading: false,
+              isFetchData: false,
             ),
           );
         } else {
-          emit(state.copyWith(isLoading: false));
+          emit(state.copyWith(isFetchData: false));
         }
       } else {
-        emit(state.copyWith(isLoading: false, isSuccess: false));
+        emit(state.copyWith(isFetchData: false, isSuccess: false));
       }
     } catch (e) {
-      emit(state.copyWith(isLoading: false, message: 'Failed to load data'));
+      emit(state.copyWith(isFetchData: false, message: 'Failed to load data'));
     }
   }
 
@@ -253,7 +252,12 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
   void parsingData(User user) {
     // Contoh sinkronisasi nilai
     List<String>? paket =
-        user.pivotPakets!.map((item) => item.pakets!.id.toString()).toList();
+        user.pivotPakets?.where((item) => item.pakets != null).map((item) {
+      return item.pakets!.id.toString();
+    }).toList();
+
+    print("user Project Leader parsing data => ${user.projectLeader?.pakets}");
+
     state.nikTextEditingController.text = user.nik ?? '';
     state.usernameTextEditingController.text = user.username ?? '';
     state.emailTextEditingController.text = user.email ?? '';
@@ -261,6 +265,8 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
         selectedRole: user.roles ?? Role(),
         selectedPakets: paket,
         selectedProjectLeader: user.projectLeader?.pakets));
+    print(
+        "project leader setelah di pasring => ${state.selectedProjectLeader}");
     state.selectedHireDate.text = user.hireDate ?? '';
     state.nameTextEditingController.text = user.name ?? '';
     state.phoneTextEditingController.text = user.phone ?? '';
@@ -312,5 +318,65 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
       }
     } catch (e) {}
     print(body);
+  }
+
+  Future<void> deleteUser(User user, BuildContext context) async {
+    emit(state.copyWith(isLoading: true));
+    String? token = await Helper().getToken();
+    try {
+      var response = await Request.req(
+          path: "${PathUrl.deleteUser}${user.id}",
+          params: null,
+          body: null,
+          token: token,
+          method: 'delete');
+      var result = json.decode(response!.body);
+      print(response.statusCode);
+      print(result);
+      if (response.statusCode == 200 && result['success'] == true) {
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+        emit(state.copyWith(
+          message: 'User Berhasil Dihapus',
+          titleMessage: 'Success',
+          typeMessage: 'success',
+          isLoading: false,
+        ));
+        clearMessage();
+        initDataUsers();
+      } else {
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+        emit(state.copyWith(
+          message: 'Gagal Hapus User',
+          titleMessage: 'Failed',
+          typeMessage: 'error',
+          isLoading: false,
+        ));
+        clearMessage();
+        // emit(state.copyWith(
+        //     message: '', titleMessage: '', typeMessage: '', isLoading: false));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        message: e.toString(),
+        titleMessage: 'Failed',
+        typeMessage: 'error',
+        isLoading: false,
+      ));
+      clearMessage();
+      // emit(state.copyWith(
+      //     message: '', titleMessage: '', typeMessage: '', isLoading: false));
+    }
+  }
+
+  void clearMessage() {
+    emit(state.copyWith(
+      message: '',
+      titleMessage: '',
+      typeMessage: '',
+    ));
   }
 }

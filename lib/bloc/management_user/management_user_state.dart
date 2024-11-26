@@ -6,6 +6,7 @@ import 'package:login/model/user.dart';
 
 class ManagementUserState extends Equatable {
   final bool isLoading;
+  final bool isFetchData;
   final bool isSuccess;
   final String message;
   final String titleMessage;
@@ -28,6 +29,7 @@ class ManagementUserState extends Equatable {
 
   ManagementUserState({
     this.isLoading = false,
+    this.isFetchData = false,
     this.isSuccess = false,
     this.message = '',
     this.titleMessage = '',
@@ -71,6 +73,7 @@ class ManagementUserState extends Equatable {
 
   ManagementUserState copyWith({
     bool? isLoading,
+    bool? isFetchData,
     bool? isSuccess,
     String? message,
     String? titleMessage,
@@ -88,6 +91,7 @@ class ManagementUserState extends Equatable {
   }) {
     return ManagementUserState(
         isLoading: isLoading ?? this.isLoading,
+        isFetchData:  isFetchData ?? this.isFetchData,
         isSuccess: isSuccess ?? this.isSuccess,
         message: message ?? this.message,
         titleMessage: titleMessage ?? this.titleMessage,
@@ -96,7 +100,7 @@ class ManagementUserState extends Equatable {
         listPaket: listPaket ?? this.listPaket,
         listRole: listRole ?? this.listRole,
         selectedPakets: selectedPakets ?? this.selectedPakets,
-        selectedRole: selectedRole ?? this.selectedRole,
+        selectedRole: selectedRole,
         nikTextEditingController: nikTextEditingController,
         usernameTextEditingController: usernameTextEditingController,
         emailTextEditingController: emailTextEditingController,
@@ -106,13 +110,13 @@ class ManagementUserState extends Equatable {
         phoneTextEditingController: phoneTextEditingController,
         taskTypeTextEditingController: taskTypeTextEditingController,
         keteranganTextEditingController: keteranganTextEditingController,
-        selectedProjectLeader:
-            selectedProjectLeader ?? this.selectedProjectLeader);
+        selectedProjectLeader: selectedProjectLeader);
   }
 
   @override
   List<Object> get props => [
         isLoading,
+        isFetchData,
         isSuccess,
         message,
         titleMessage,

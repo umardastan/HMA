@@ -23,6 +23,7 @@ class PathUrl {
   static const listRole = '/list-role';
   static const listPaket = '/list-paket';
   static const createUser = '/create-user';
+  static const deleteUser = '/delete-user/';
 }
 
 enum MessageType { success, error, warning, info }

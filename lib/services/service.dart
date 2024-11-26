@@ -35,6 +35,16 @@ class Request {
             },
           );
           return response;
+        case 'delete':
+          print('masuk method DELETE');
+          var response = await http.delete(
+            url,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${token ?? ''}'
+            },
+          );
+          return response;
         default:
       }
     } on Exception catch (e) {

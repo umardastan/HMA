@@ -33,18 +33,14 @@ GoRouter router(String initialLocation) {
                     builder: (context, state) => const ManagementUsersScreen(),
                     routes: [
                       GoRoute(
-                          path: "${Routes.ADDEDITUSERSCREEN}/:isEditing",
+                          path: "${Routes.ADDEDITUSERSCREEN}/:type",
                           builder: (context, state) {
                             String userString = jsonEncode(state.extra);
                             User user = User.fromJson(jsonDecode(userString));
                             print(user);
-                            final isEditing =
-                                state.pathParameters['isEditing'] == 'true';
-
-                            return AddEditUserScreen(
-                              isEditing: isEditing,
-                              user: user
-                            );
+                            final type = state.pathParameters['type'];
+                            print(type);
+                            return AddEditUserScreen(type: type!, user: user);
                           }),
                     ])
               ]),

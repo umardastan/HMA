@@ -1,12 +1,12 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:login/bloc/dashboard/dahsboard_cubit.dart';
 import 'package:login/bloc/management_user/management_user_cubit.dart';
 import 'package:login/bloc/management_user/management_user_state.dart';
 import 'package:login/router/app_routes.dart';
-import 'package:login/utils/constants/constantVar.dart';
+import 'package:login/utils/widget.dart';
 
 class ManagementUsersScreen extends StatefulWidget {
   const ManagementUsersScreen({super.key});
@@ -28,7 +28,30 @@ class _ManagementUsersScreenState extends State<ManagementUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ManagementUserCubit, ManagementUserState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.isLoading) {
+          WidgetSupport.showLoadingDialog(context);
+        }
+        if (state.message.isNotEmpty &&
+            state.titleMessage.isNotEmpty &&
+            state.typeMessage.isNotEmpty) {
+          AwesomeDialog(
+            dismissOnTouchOutside: false,
+            context: context,
+            dialogType: state.typeMessage == 'success'
+                ? DialogType.success
+                : state.typeMessage == 'warning'
+                    ? DialogType.warning
+                    : DialogType.error,
+            animType: AnimType.topSlide,
+            title: state.titleMessage,
+            desc: state.message,
+            btnOkOnPress: () async {
+              // profileCubit.refreshData(context);
+            },
+          ).show();
+        }
+      },
       builder: (context, state) {
         Color colorText = const Color(0XFFE8BCB9);
         Color cardColor = const Color(0XFF432E54);
@@ -36,7 +59,7 @@ class _ManagementUsersScreenState extends State<ManagementUsersScreen> {
           appBar: AppBar(
             title: const Text("Management Users"),
           ),
-          body: state.isLoading
+          body: state.isFetchData
               ? const Center(child: LinearProgressIndicator())
               : AnimationLimiter(
                   child: Column(
@@ -134,14 +157,18 @@ class _ManagementUsersScreenState extends State<ManagementUsersScreen> {
                                         onSelected: (value) {
                                           if (value == 'edit') {
                                             context.go(
-                                                "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/true",
+                                                "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/edit",
                                                 extra: user);
                                             print(user);
                                             // Tambahkan aksi edit di sini
                                           } else if (value == 'delete') {
-                                            print('delete invoked');
-                                            // Tambahkan aksi delete di sini
+                                            context
+                                                .read<ManagementUserCubit>()
+                                                .deleteUser(user, context);
                                           } else if (value == 'detail') {
+                                            context.go(
+                                                "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/detail",
+                                                extra: user);
                                             print('detail invoked');
                                             // Tambahkan aksi lihat detail di sini
                                           }
@@ -198,7 +225,7 @@ class _ManagementUsersScreenState extends State<ManagementUsersScreen> {
             tooltip: 'Add User',
             onPressed: () {
               context.go(
-                  "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/false",
+                  "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/tambah",
                   extra: {"isEditing": true});
             },
             child: const Icon(
