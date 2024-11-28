@@ -4,30 +4,32 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/management_user/management_user_cubit.dart';
 import 'package:login/bloc/management_user/management_user_state.dart';
+import 'package:login/bloc/paket/paket_cubit.dart';
+import 'package:login/bloc/paket/paket_state.dart';
+import 'package:login/model/detail_paket.dart';
 import 'package:login/model/paket.dart';
 import 'package:login/model/role.dart';
-import 'package:login/model/user.dart';
 
 // Data model untuk UserType
 const userTypeList = ['Admin', 'User', 'Manager'];
 
-class AddEditUserScreen extends StatefulWidget {
+class AddEditPaket extends StatefulWidget {
   final String type;
-  final User user;
+  final DetailPaket paket;
   // final List<Pakets> listpaket;
 
-  const AddEditUserScreen({
+  const AddEditPaket({
     super.key,
     required this.type,
-    required this.user,
+    required this.paket,
     // required this.listpaket,
   });
 
   @override
-  _AddEditUserScreenState createState() => _AddEditUserScreenState();
+  _AddEditPaketState createState() => _AddEditPaketState();
 }
 
-class _AddEditUserScreenState extends State<AddEditUserScreen> {
+class _AddEditPaketState extends State<AddEditPaket> {
   final _formKey = GlobalKey<FormState>();
 
   List<Pakets> selectedPackages = [];
@@ -35,17 +37,17 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("ini data user => ${widget.user.id}");
+    print("ini data paket => ${widget.paket.id}");
     if (widget.type == "edit" || widget.type == "detail") {
-      context.read<ManagementUserCubit>().parsingData(widget.user);
+      context.read<PaketCubit>().parsingData(widget.paket);
     } else {
-      context.read<ManagementUserCubit>().resetForm();
+      context.read<PaketCubit>().resetForm();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ManagementUserCubit, ManagementUserState>(
+    return BlocConsumer<PaketCubit, PaketState>(
       listener: (context, state) {
         if (state.message.isNotEmpty &&
             state.titleMessage.isNotEmpty &&
@@ -71,10 +73,10 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(widget.type == 'edit'
-                ? 'Edit Pengguna'
+                ? 'Edit Paket'
                 : widget.type == 'detail'
-                    ? 'Detail Pengguna'
-                    : 'Tambah Pengguna'),
+                    ? 'Detail Paket'
+                    : 'Tambah Paket'),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -84,57 +86,20 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
                 children: [
                   // buildTextField('User ID', userIdController),
                   buildTextField(
-                      controller: state.nikTextEditingController,
-                      label: 'NIK',
-                      maxLength: 16,
-                      isNumber: true,
+                      controller: state.kodepaketTextEditingController,
+                      label: 'Kode Paket',
                       onChange: (String value) {},
                       isReadOnly: widget.type == 'detail'),
                   buildTextField(
-                    controller: state.usernameTextEditingController,
-                    label: 'Username',
+                    controller: state.judulTextEditingController,
+                    label: 'Judul',
                     isReadOnly: widget.type == 'detail',
                     onChange: (value) {},
                   ),
                   buildTextField(
-                      controller: state.emailTextEditingController,
-                      label: 'Email',
-                      isReadOnly: widget.type == 'detail',
-                      onChange: (value) {},
-                      isEmail: true),
-                  buildUserTypeDropdown(state.listRole,
-                      isReadonly: widget.type == 'detail'),
-                  if (widget.type == 'tambah')
-                    buildTextField(
-                        controller: state.passwordTextEditingController,
-                        label: 'Password',
-                        onChange: (value) {},
-                        isPassword: true),
-                  buildTextFieldDate(
-                    label: 'Hire Date',
-                    isReadonly: widget.type == 'detail',
-                    // onChange: (value) {},
-                  ),
-                  buildTextField(
-                    controller: state.nameTextEditingController,
-                    label: 'Name',
-                    isReadOnly: widget.type == 'detail',
-                    onChange: (value) {},
-                  ),
-                  buildTextField(
-                    controller: state.phoneTextEditingController,
-                    label: 'Phone',
-                    isReadOnly: widget.type == 'detail',
+                    controller: state.tahunTextEditingController,
+                    label: 'Tahun',
                     isNumber: true,
-                    maxLength: 13,
-                    onChange: (value) {},
-                  ),
-                  buildMultipleChoiceChips(isReadOnly: widget.type == 'detail'),
-                  buildProjectLeaderDropdown(
-                      isReadOnly: widget.type == 'detail'),
-                  buildTextField(
-                    controller: state.taskTypeTextEditingController,
-                    label: 'Task Type',
                     isReadOnly: widget.type == 'detail',
                     onChange: (value) {},
                   ),
@@ -158,20 +123,20 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
                             animType: AnimType.topSlide,
                             title: "Konfirmasi",
                             desc:
-                                "Apakah anda yakin ingin ${widget.type == 'edit' ? 'Update' : 'Create'} user ${state.nameTextEditingController.text} ???",
+                                "Apakah anda yakin ingin ${widget.type == 'edit' ? 'Update' : 'Simpan'} paket ${state.judulTextEditingController.text} ???",
                             btnCancelOnPress: () {},
                             btnOkOnPress: () async {
                               // profileCubit.refreshData(context);
                               switch (widget.type) {
                                 case 'edit':
                                   context
-                                      .read<ManagementUserCubit>()
-                                      .updateUser(widget.user);
+                                      .read<PaketCubit>()
+                                      .updatePaket(widget.paket);
                                   break;
                                 case 'tambah':
                                   context
-                                      .read<ManagementUserCubit>()
-                                      .saveUser();
+                                      .read<PaketCubit>()
+                                      .savePaket();
                                   break;
                                 default:
                               }
@@ -185,45 +150,10 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
               ),
             ),
           ),
-          // floatingActionButton: FloatingActionButton(onPressed: () {
-          //   context.read<ManagementUserCubit>().resetForm();
-          // }),
         );
       },
     );
   }
-
-  // Widget untuk Input TextField
-  // Widget buildTextField(String label, TextEditingController controller,
-  //     {bool isEmail = false,
-  //     bool isPassword = false,
-  //     bool isNumber = false,
-  //     int maxLines = 1}) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-  //     child: TextFormField(
-  //       controller: controller,
-  //       obscureText: isPassword,
-  //       keyboardType: isNumber
-  //           ? TextInputType.number
-  //           : isEmail
-  //               ? TextInputType.emailAddress
-  //               : TextInputType.text,
-  //       decoration: InputDecoration(
-  //         labelText: label,
-  //         border: OutlineInputBorder(),
-  //       ),
-  //       validator: (value) {
-  //         if (value == null || value.isEmpty) {
-  //           return '$label tidak boleh kosong';
-  //         }
-  //         return null;
-  //       },
-  //       maxLines: maxLines,
-  //       onChanged: ,
-  //     ),
-  //   );
-  // }
 
   // Widget untuk Dropdown UserType
   Widget buildUserTypeDropdown(List<Role> listRole, {bool isReadonly = false}) {
@@ -299,46 +229,7 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
     );
   }
 
-//   // Widget untuk Multiple Choice Chip
-//   Widget buildMultipleChoiceChips() {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 8.0),
-//       child: ChipsInput<Pakets>(
-//         initialValue: selectedPackages,
-//         decoration: InputDecoration(
-//           labelText: 'Paket',
-//           border: OutlineInputBorder(),
-//         ),
-//         findSuggestions: (String query) {
-//           return widget.listpaket.where((paket) {
-//             return paket.judul!.toLowerCase().contains(query.toLowerCase());
-//           }).toList();
-//         },
-//         onChanged: (data) {
-//           setState(() {
-//             selectedPackages = List.from(data);
-//           });
-//         },
-//         chipBuilder: (context, state, paket) {
-//           return InputChip(
-//             label: Text(paket.judul!),
-//             onDeleted: () => state.deleteChip(paket),
-//           );
-//         },
-//         suggestionBuilder: (context, state, paket) {
-//           return ListTile(
-//             title: Text(paket.judul!),
-//             onTap: () => state.selectSuggestion(paket),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
   Widget buildMultipleChoiceChips({required bool isReadOnly}) {
-    // int inputs = listPaket.length;
-    // final List<Pakets> selectedItems = [];
     return BlocConsumer<ManagementUserCubit, ManagementUserState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -392,11 +283,6 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
                 },
                 child: const Text('Reset'),
               ),
-              // const SizedBox(height: 10),
-              // // Menampilkan pilihan yang dipilih
-              // Text(
-              //   'Dipilih: ${state.selectedPakets.map((e) => e).join(', ')}',
-              // ),
             ],
           ),
         );
@@ -449,10 +335,7 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
     );
   }
 
-  Widget buildTextFieldDate({required String label, bool isReadonly = false
-
-      // required Null Function(String value) onChange,
-      }) {
+  Widget buildTextFieldDate({required String label, bool isReadonly = false}) {
     return BlocConsumer<ManagementUserCubit, ManagementUserState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -474,22 +357,6 @@ class _AddEditUserScreenState extends State<AddEditUserScreen> {
                 ? null
                 : () async {
                     context.read<ManagementUserCubit>().selectDate(context);
-                    // final DateTime? pickedDate = await showDatePicker(
-                    //   context: context,
-                    //   initialDate: DateTime.now(),
-                    //   firstDate: DateTime(2000), // Tanggal paling awal
-                    //   lastDate: DateTime(2100), // Tanggal paling akhir
-                    // );
-                    // var formattedDate;
-                    // if (pickedDate != null) {
-                    //   formattedDate =
-                    //       "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
-                    //   setState(() {
-                    //     selectedHireDate.text = formattedDate;
-                    //   });
-                    //   // print(state.selectedHireDate);
-                    //   print(formattedDate);
-                    // }
                   },
           );
         });

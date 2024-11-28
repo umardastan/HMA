@@ -15,7 +15,6 @@ class PathUrl {
   static const dataDashboard = '/list-dashboard-v2';
   static const updateStatusTask = '/task/update-status-task';
   static const getUserById = '/list-user/';
-  static const updateUser = '/update-user/';
   static const updatePassword = '/update-password/';
   static const dashboardPaket = '/my-paket-progres';
   static const taskList = '/task/list-task';
@@ -24,6 +23,9 @@ class PathUrl {
   static const listPaket = '/list-paket';
   static const createUser = '/create-user';
   static const deleteUser = '/delete-user/';
+  static const updateUser = '/update-user/';
+  static const createPaket = '/create-paket';
+  static const updatePaket = '/update-paket/';
 }
 
 enum MessageType { success, error, warning, info }

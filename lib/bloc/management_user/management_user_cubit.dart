@@ -155,7 +155,12 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
   }
 
   void setSelectedRole(Role? value) {
-    emit(state.copyWith(selectedRole: value));
+    emit(
+      state.copyWith(
+        selectedRole: value,
+        selectedProjectLeader: state.selectedProjectLeader,
+      ),
+    );
     print(state.selectedRole);
   }
 
@@ -224,12 +229,20 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
             typeMessage: 'error'));
         emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
       }
-    } catch (e) {}
-    print(body);
+    } catch (e) {
+      emit(state.copyWith(
+          message: e.toString(), titleMessage: 'Failed', typeMessage: 'error'));
+      emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
+    }
   }
 
   void setSelectedProjectLeader(Pakets pakets) {
-    emit(state.copyWith(selectedProjectLeader: pakets));
+    emit(
+      state.copyWith(
+        selectedRole: state.selectedRole,
+        selectedProjectLeader: pakets,
+      ),
+    );
   }
 
   void resetForm() {
@@ -278,23 +291,23 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
     //     "ini data Selected Project Leader yang sudah di emit=> ${state.selectedProjectLeader}");
   }
 
-  void updateUser() async {
+  void updateUser(User user) async {
     String? token = await Helper().getToken();
     Map body = {
-      "username": "ittest",
-      "nik": null,
-      "name": "test saja",
-      "hire_date": "2024-03-01",
-      "email": "testsaja@gmail.com",
-      "phone": "0812940775952",
-      "keterangan": "blok",
-      "paket": ["11"],
-      "project_leader": null,
+      "username": state.usernameTextEditingController.text,
+      "nik": state.nikTextEditingController.text,
+      "name": state.nameTextEditingController.text,
+      "hire_date": state.selectedHireDate.text,
+      "email": state.emailTextEditingController.text,
+      "phone": state.phoneTextEditingController.text,
+      "keterangan": state.keteranganTextEditingController.text,
+      "paket": state.selectedPakets,
+      "project_leader": state.selectedProjectLeader!.id,
     };
 
     try {
       var response = await Request.req(
-          path: PathUrl.createUser,
+          path: "${PathUrl.updateUser}${user.id}",
           params: null,
           body: body,
           token: token,
@@ -304,20 +317,23 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
       print(result);
       if (response.statusCode == 200 && result['success'] == true) {
         emit(state.copyWith(
-            message: 'Create User Berhasil',
+            message: 'Update User Berhasil',
             titleMessage: 'Success',
             typeMessage: 'success'));
         emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
         resetForm();
       } else {
         emit(state.copyWith(
-            message: 'Gagal Create User',
+            message: 'Gagal Update User',
             titleMessage: 'Failed',
             typeMessage: 'error'));
         emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
       }
-    } catch (e) {}
-    print(body);
+    } catch (e) {
+      emit(state.copyWith(
+          message: e.toString(), titleMessage: 'Failed', typeMessage: 'error'));
+      emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
+    }
   }
 
   Future<void> deleteUser(User user, BuildContext context) async {

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/dar/dar_cubit.dart';
 import 'package:login/bloc/dashboard/dahsboard_cubit.dart';
 import 'package:login/bloc/management_user/management_user_cubit.dart';
+import 'package:login/bloc/paket/paket_cubit.dart';
 import 'package:login/bloc/profile/profile_cubit.dart';
 import 'package:login/router/app_routes.dart';
 import 'package:login/router/router.dart';
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
 
           return managementUserCubit;
         }),
+        BlocProvider(
+          create: (context) => PaketCubit(),
+        ),
         // BlocProvider(
         //   create: (_) => DarCubit()
         //     ..loadTasks(yourTasksList)

@@ -12,6 +12,7 @@ import 'package:login/screens/components/showDialog.dart';
 import 'package:login/screens/dar/aktivitas.dart';
 import 'package:login/screens/dar/dashboard.dart';
 import 'package:login/screens/dar/dashboard_paket.dart';
+import 'package:login/screens/dar/paket/paket.dart';
 import 'package:login/services/service.dart';
 import 'package:login/utils/constants/constantVar.dart';
 import 'package:login/utils/helper/helper.dart';
@@ -110,6 +111,7 @@ class DarCubit extends Cubit<DarState> {
   }
 
   Future<void> initMenu() async {
+    String? role = await Helper().getRole();
     emit(state.copyWith(currentScreen: 'Dashboard', listMenu: [
       MenuDar(
           title: "Dashboard",
@@ -122,7 +124,13 @@ class DarCubit extends Cubit<DarState> {
       MenuDar(
           title: "Dashboard Paket",
           icon: const Icon(Icons.card_giftcard),
-          screen: const DashboardPaket())
+          screen: const DashboardPaket()),
+      if (role != '4')
+        MenuDar(
+          title: "Paket",
+          icon: const Icon(Icons.work),
+          screen: const Paket(),
+        ),
     ]));
   }
 

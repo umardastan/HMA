@@ -162,9 +162,21 @@ class _ManagementUsersScreenState extends State<ManagementUsersScreen> {
                                             print(user);
                                             // Tambahkan aksi edit di sini
                                           } else if (value == 'delete') {
-                                            context
-                                                .read<ManagementUserCubit>()
-                                                .deleteUser(user, context);
+                                            AwesomeDialog(
+                                              dismissOnTouchOutside: false,
+                                              context: context,
+                                              dialogType: DialogType.warning,
+                                              animType: AnimType.topSlide,
+                                              title: "Peringatan !!!",
+                                              desc:
+                                                  "Apakah anda yakin ingin menghapus ${user.name}",
+                                              btnOkOnPress: () async {
+                                                context
+                                                    .read<ManagementUserCubit>()
+                                                    .deleteUser(user, context);
+                                              },
+                                              btnCancelOnPress: () {},
+                                            ).show();
                                           } else if (value == 'detail') {
                                             context.go(
                                                 "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/detail",
