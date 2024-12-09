@@ -31,6 +31,7 @@ class DarState extends Equatable {
   final String role;
   final List<User> users;
   final User? selectedUserForTask;
+  final int? indexSubMenu;
 
   DarState({
     User? user,
@@ -56,6 +57,7 @@ class DarState extends Equatable {
     this.role = '',
     List<User>? users,
     this.selectedUserForTask,
+    this.indexSubMenu,
   })  : user = user ?? User(),
         task = task ?? Aktivitas(),
         dataDashboard = dataDashboard ?? DashboardModel(),
@@ -88,7 +90,7 @@ class DarState extends Equatable {
         toDate = toDate ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
         listDashboardPaket = listDashboardPaket ?? <DashboardPaketModel>[],
         users = users ?? <User>[];
-        // selectedUserForTask = selectedUserForTask ?? User();
+  // selectedUserForTask = selectedUserForTask ?? User();
 
   DarState copyWith({
     User? user,
@@ -115,6 +117,7 @@ class DarState extends Equatable {
     String? role,
     List<User>? users,
     User? selectedUserForTask,
+    int? indexSubMenu,
   }) {
     return DarState(
       user: user ?? this.user,
@@ -140,7 +143,8 @@ class DarState extends Equatable {
       selectedIdUser: selectedIdUser ?? this.selectedIdUser,
       role: role ?? this.role,
       users: users ?? this.users,
-      selectedUserForTask: selectedUserForTask ?? this.selectedUserForTask,
+      selectedUserForTask: selectedUserForTask ?? this.selectedUserForTask, // kalau di berikan nilai null diakan kembali kenilai sebelumnya
+      indexSubMenu: indexSubMenu // kalau diberikan nilai null, maka nilai nya menjadi null
     );
   }
 
@@ -168,7 +172,8 @@ class DarState extends Equatable {
         selectedIdUser,
         role,
         users,
-        selectedUserForTask
+        selectedUserForTask,
+        indexSubMenu,
       ];
 }
 

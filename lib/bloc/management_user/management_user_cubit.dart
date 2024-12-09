@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/management_user/management_user_state.dart';
+import 'package:login/model/detail_paket.dart';
 import 'package:login/model/paket.dart';
 import 'package:login/model/role.dart';
 import 'package:login/model/user.dart';
@@ -395,4 +396,9 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
       typeMessage: '',
     ));
   }
+
+  void parsingDataSelectedPaket(Pakets paket) {
+    emit(state.copyWith(selectedProjectLeader: paket));
+  }
+
 }

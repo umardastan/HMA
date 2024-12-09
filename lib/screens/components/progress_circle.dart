@@ -5,9 +5,18 @@ import 'package:percent_indicator/percent_indicator.dart';
 class ProgressCircleWidget extends StatelessWidget {
   final String totalPersenAll;
   final String title;
+  final Color backgroundColor;
+  final double fontSize;
+  final Color textPersetColor;
 
-  const ProgressCircleWidget(
-      {required this.totalPersenAll, required this.title, super.key});
+  const ProgressCircleWidget({
+    required this.totalPersenAll,
+    required this.title,
+    required this.backgroundColor,
+    required this.fontSize,
+    required this.textPersetColor,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +30,11 @@ class ProgressCircleWidget extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 12,
-            color: percentage >= 80
+              fontSize: fontSize,
+              color: percentage >= 80
                   ? Colors.green
                   : (percentage >= 50 ? Colors.orange : Colors.red),
-            fontWeight: FontWeight.w600
-          ),
+              fontWeight: FontWeight.w600),
         ),
         const Gap(10),
         CircularPercentIndicator(
@@ -34,11 +42,14 @@ class ProgressCircleWidget extends StatelessWidget {
           lineWidth: 5.0,
           animation: true,
           percent: progressValue,
-          center: Text("$percentage%"),
+          center: Text(
+            "$percentage%",
+            style: TextStyle(color: textPersetColor),
+          ),
           progressColor: percentage >= 80
               ? Colors.green
               : (percentage >= 50 ? Colors.orange : Colors.red),
-          backgroundColor: Colors.grey[300]!,
+          backgroundColor: backgroundColor,
           circularStrokeCap: CircularStrokeCap.round,
         ),
       ],

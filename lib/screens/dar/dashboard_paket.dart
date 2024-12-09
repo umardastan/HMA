@@ -29,147 +29,172 @@ class _DashboardPaketState extends State<DashboardPaket> {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
-            body: ListView.builder(
-              itemCount: state.listDashboardPaket.length,
-              itemBuilder: (context, index) {
-                final paket = state.listDashboardPaket[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  elevation: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: ColorApp.basic,
+            body: state.isLoading
+                ? const Center(
+                    child: LinearProgressIndicator(),
+                  )
+                : 
+                ListView.builder(
+                    itemCount: state.listDashboardPaket.length,
+                    itemBuilder: (context, index) {
+                      final paket = state.listDashboardPaket[index];
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Text(
-                          paket.judul ?? "kosong",
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                        elevation: 4,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Kode: ${paket.kodePaket}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  'Tahun: ${paket.tahun}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Leader: ${paket.projectLeader}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Text(
-                              'Deadline: ${paket.tglDeadline}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            SizedBox(
+                            Container(
                               width: MediaQuery.sizeOf(context).width,
-                              child: Wrap(
-                                alignment: WrapAlignment.spaceEvenly,
-                                runAlignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 10.0,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: ColorApp.basic,
+                              ),
+                              child: Text(
+                                paket.judul ?? "kosong",
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 16, right: 16, bottom: 16),
+                              child: Column(
                                 children: [
-                                  ProgressCircleWidget(
-                                    totalPersenAll: '${paket.totalPersenAll}',
-                                    title: 'Software\nHMA',
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Kode: ${paket.kodePaket}',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Tahun: ${paket.tahun}',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  ProgressCircleWidget(
-                                    totalPersenAll: '${paket.totalPersenV}',
-                                    title: 'Software\nVendor',
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Leader: ${paket.projectLeader}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                  ProgressCircleWidget(
-                                    totalPersenAll: '${paket.totalPersenHardV}',
-                                    title: 'Hardware\n',
+                                  Text(
+                                    'Deadline: ${paket.tglDeadline}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                  ProgressCircleWidget(
-                                    totalPersenAll: '${paket.totalPersenAll}',
-                                    title: 'SH\nVendor',
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    width: MediaQuery.sizeOf(context).width,
+                                    child: Wrap(
+                                      alignment: WrapAlignment.spaceEvenly,
+                                      runAlignment: WrapAlignment.center,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      spacing: 10.0,
+                                      children: [
+                                        ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${paket.totalPersenAll}',
+                                          title: 'Software\nHMA',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.grey.shade300,
+                                          textPersetColor: Colors.black,
+                                        ),
+                                        ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${paket.totalPersenV}',
+                                          title: 'Software\nVendor',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.grey.shade300,
+                                          textPersetColor: Colors.black,
+                                        ),
+                                        ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${paket.totalPersenHardV}',
+                                          title: 'Hardware\n',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.grey.shade300,
+                                          textPersetColor: Colors.black,
+                                        ),
+                                        ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${paket.totalPersenAll}',
+                                          title: 'SH\nVendor',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.grey.shade300,
+                                          textPersetColor: Colors.black,
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                  // LinearProgressIndicator(
+                                  //   value: double.parse(paket.totalPersenAll ?? "0") / 100,
+                                  //   backgroundColor: Colors.grey[300],
+                                  //   color: double.parse(paket.totalPersenAll ?? "0") >= 80
+                                  //       ? Colors.green
+                                  //       : Colors.orange,
+                                  // ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Keterangan: ${paket.keterangan}',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                  paket.kendala != null
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            'Kendala: ${paket.kendala!.isNotEmpty ? paket.kendala : 'Kosong'}',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
+                                      : const Padding(
+                                          padding: EdgeInsets.only(top: 8.0),
+                                          child: Text(
+                                            'Kendala: Kosong',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        )
                                 ],
                               ),
-                            ),
-                            // LinearProgressIndicator(
-                            //   value: double.parse(paket.totalPersenAll ?? "0") / 100,
-                            //   backgroundColor: Colors.grey[300],
-                            //   color: double.parse(paket.totalPersenAll ?? "0") >= 80
-                            //       ? Colors.green
-                            //       : Colors.orange,
-                            // ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Keterangan: ${paket.keterangan}',
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                            paket.kendala != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      'Kendala: ${paket.kendala!.isNotEmpty ? paket.kendala : 'Kosong'}',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  )
-                                : const Padding(
-                                    padding: EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      'Kendala: Kosong',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  )
+                            )
                           ],
                         ),
-                      )
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           );
         });
   }

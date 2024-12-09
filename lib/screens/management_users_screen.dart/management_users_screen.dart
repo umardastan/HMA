@@ -232,6 +232,8 @@ class _ManagementUsersScreenState extends State<ManagementUsersScreen> {
                     ],
                   ),
                 ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             backgroundColor: const Color(0XFFAE445A),
             tooltip: 'Add User',

@@ -228,6 +228,9 @@ class Moduls {
     }
     return data;
   }
+
+  @override
+  String toString() => "{id: $id, paket_id: $paketId, jenis_module: $jenisModul, kode_modul: $kodeModul}";
 }
 
 // CONTOH DATA MODULS

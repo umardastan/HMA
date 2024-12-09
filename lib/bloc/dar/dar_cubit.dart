@@ -13,6 +13,9 @@ import 'package:login/screens/dar/aktivitas.dart';
 import 'package:login/screens/dar/dashboard.dart';
 import 'package:login/screens/dar/dashboard_paket.dart';
 import 'package:login/screens/dar/paket/paket.dart';
+import 'package:login/screens/dar/spek_teknis/list_spek_teknis.dart';
+import 'package:login/screens/dar/spek_teknis/modul/modul_page.dart';
+import 'package:login/screens/dar/spek_teknis/sub_modul_page.dart';
 import 'package:login/services/service.dart';
 import 'package:login/utils/constants/constantVar.dart';
 import 'package:login/utils/helper/helper.dart';
@@ -112,7 +115,11 @@ class DarCubit extends Cubit<DarState> {
 
   Future<void> initMenu() async {
     String? role = await Helper().getRole();
-    emit(state.copyWith(currentScreen: 'Dashboard', listMenu: [
+    emit(state.copyWith(
+      currentScreen: 'Dashboard', 
+      indexMenu: 0,
+      indexSubMenu: null,
+      listMenu: [
       MenuDar(
           title: "Dashboard",
           icon: const Icon(Icons.dashboard),
@@ -131,11 +138,52 @@ class DarCubit extends Cubit<DarState> {
           icon: const Icon(Icons.work),
           screen: const Paket(),
         ),
+      if (role != '4')
+        MenuDar(
+          title: "Spek Teknis", // Menu utama
+          icon: const Icon(Icons.notes),
+          subMenu: [
+            MenuDar(
+                title: "List Spek Teknis", // Submenu
+                screen: const ListSpekTeknisPage()),
+            MenuDar(
+                title: "Modul", // Submenu
+                screen: const ModulPage()),
+            // MenuDar(
+            //     title: "Sub Modul", // Submenu
+            //     screen: const SubModulPage()),
+          ],
+        ),
     ]));
   }
 
-  void navigateTo(String menu, int i) {
-    emit(state.copyWith(currentScreen: menu, indexMenu: i));
+  void navigateTo(String title, int index, int? indexSubMenu, {required MenuDar? subMenu}) {
+    emit(state.copyWith(
+      // ignore: unnecessary_null_comparison
+      currentScreen: subMenu != null ? subMenu.title : title,
+      indexMenu: index,
+      indexSubMenu: indexSubMenu,
+    ));
+    // print("Navigating to: ${subMenu?.title ?? title}");
+    // print("indexMenu => $index");
+    // print("indexSubMenu => $indexSubMenu");
+    // print('subMenu => $subMenu');
+    // if (subMenu != null) {
+    //   print('sub menu TIDAK null');
+    //   emit(state.copyWith(
+    //     currentScreen: subMenu.title,
+    //     indexMenu: index,
+    //     indexSubMenu: indexSubMenu,
+    //   ));
+    // } else {
+    //   print('sub menu KOSONG');
+    //   emit(state.copyWith(
+    //     currentScreen: title,
+    //     indexMenu: index,
+    //     indexSubMenu: indexSubMenu,
+    //   ));
+    //   print("submenu setelah di ubah => ${state.indexSubMenu}");
+    // }
   }
 
   void updateStatus(int? id, String newStatus) {
@@ -260,6 +308,7 @@ class DarCubit extends Cubit<DarState> {
   }
 
   Future<void> initDataDashboardPaket(BuildContext context) async {
+    emit(state.copyWith(isLoading: true));
     try {
       String? user = await Helper().getDataUser();
       String? token = await Helper().getToken();
@@ -272,22 +321,26 @@ class DarCubit extends Cubit<DarState> {
             token: token,
             method: 'get');
         var result = json.decode(response!.body);
-
         if (response.statusCode == 200 && result['success'] == true) {
-          emit(state.copyWith(
-            listDashboardPaket: (result['data'] as List)
-                .map((item) {
-                  // print(item);
-                  return DashboardPaketModel.fromJson(item);
-                })
-                .toList()
-                .cast<DashboardPaketModel>(),
-          ));
-          // print('ini hasilnya ==>>');
-          // print(state.listDashboardPaket.toString());
-        } else {
-          cShowDialog(
-              context: context, title: "Warning", message: result['success']);
+          List<DashboardPaketModel> data = <DashboardPaketModel>[];
+          for (var i = 0; i < (result['data'] as List).length; i++) {
+            data.add(DashboardPaketModel.fromJson(result['data'][i]));
+            emit(state.copyWith(listDashboardPaket: data));
+          }
+          // List<DashboardPaketModel> data = (result['data'] as List)
+          //     .map((item) {
+          //       // print(item);
+          //       return DashboardPaketModel.fromJson(item);
+          //     })
+          //     .toList()
+          //     .cast<DashboardPaketModel>();
+          // print(data);
+
+          //   print('ini hasilnya ==>>');
+          //   print(state.listDashboardPaket.toString());
+          // } else {
+          // cShowDialog(
+          //     context: context, title: "Warning", message: result['success']);
         }
       } else {
         emit(state.copyWith(isLoading: false, isSuccess: false));

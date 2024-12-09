@@ -1,12 +1,16 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login/bloc/management_user/management_user_cubit.dart';
 import 'package:login/bloc/paket/paket_cubit.dart';
 import 'package:login/bloc/paket/paket_state.dart';
-import 'package:login/model/detail_paket.dart';
 import 'package:login/router/app_routes.dart';
+import 'package:login/screens/components/progress_circle.dart';
+import 'package:login/utils/constants/colors.dart';
 
 class Paket extends StatefulWidget {
   const Paket({super.key});
@@ -19,15 +23,6 @@ class _PaketState extends State<Paket> {
   late PaketCubit paketCubit;
   static const headerStyle = TextStyle(
       color: Color(0xffffffff), fontSize: 18, fontWeight: FontWeight.bold);
-  static const contentStyleHeader = TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.w700);
-  static const contentStyle = TextStyle(
-      color: Color(0xff999999), fontSize: 14, fontWeight: FontWeight.normal);
-  static const loremIpsum =
-      '''Lorem ipsum is typically a corrupted version of 'De finibus bonorum et malorum', a 1st century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.''';
-  static const slogan =
-      'Do not forget to play around with all sorts of colors, backgrounds, borders, etc.';
-
   @override
   void initState() {
     super.initState();
@@ -38,6 +33,7 @@ class _PaketState extends State<Paket> {
     paketCubit.initDataPaket(
         context); // buat fungsi khusus untuk manggil filter data jangan di gabung dengan initData
     // darCubit.initDataUsers(context);
+    context.read<ManagementUserCubit>().initDataPakets();
   }
 
   @override
@@ -52,10 +48,11 @@ class _PaketState extends State<Paket> {
                 : Accordion(
                     headerBorderColor: Colors.blueGrey,
                     headerBorderColorOpened: Colors.transparent,
+                    headerBackgroundColor: ColorApp.basic,
                     // headerBorderWidth: 1,
-                    headerBackgroundColorOpened: Colors.green,
+                    headerBackgroundColorOpened: ColorApp.button,
                     contentBackgroundColor: Colors.white,
-                    contentBorderColor: Colors.green,
+                    contentBorderColor: ColorApp.button,
                     contentBorderWidth: 3,
                     contentHorizontalPadding: 20,
                     scaleWhenAnimating: true,
@@ -65,7 +62,7 @@ class _PaketState extends State<Paket> {
                     sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
                     sectionClosingHapticFeedback: SectionHapticFeedback.light,
                     children: [
-                      ...state.listPaket.map((item) {
+                      ...state.listPaket.map((itemPaket) {
                         return AccordionSection(
                           isOpen: true,
                           contentVerticalPadding: 20,
@@ -75,80 +72,279 @@ class _PaketState extends State<Paket> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                item.judul ?? '',
+                                itemPaket.judul ?? '',
                                 style: headerStyle,
                                 overflow: TextOverflow.ellipsis,
                               ),
+                              const Gap(10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
-                                    item.kodePaket ?? "",
+                                    itemPaket.kodePaket ?? "",
                                     style: headerStyle,
                                   ),
-                                  if (item.kendala != "" &&
-                                      item.kendala != null)
+                                  if (itemPaket.kendala != "" &&
+                                      itemPaket.kendala != null)
                                     Tooltip(
-                                        message: item.kendala,
+                                        message: itemPaket.kendala,
                                         child: const Icon(
                                           Icons.warning,
                                           color: Colors.amberAccent,
                                         )),
-                                  if (item.tglDeadline != "" &&
-                                      item.tglDeadline != null)
+                                  if (itemPaket.tglDeadline != "" &&
+                                      itemPaket.tglDeadline != null)
                                     Tooltip(
-                                      message: item.tglDeadline ?? '',
+                                      message: itemPaket.tglDeadline ?? '',
                                       child: const Icon(
                                         Icons.date_range,
                                         color: Colors.redAccent,
                                       ),
                                     ),
                                   Text(
-                                    item.tahun ?? "",
+                                    itemPaket.tahun ?? "",
                                     style: headerStyle,
                                   )
                                 ],
                               ),
+                              if (itemPaket.kodePaket != "ADM") const Gap(10),
+                              if (itemPaket.kodePaket != "ADM")
+                                SizedBox(
+                                  width: MediaQuery.sizeOf(context).width,
+                                  child: Wrap(
+                                    alignment: WrapAlignment.spaceEvenly,
+                                    runAlignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    spacing: 10.0,
+                                    children: [
+                                      ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${itemPaket.totalPersenAll}',
+                                          title: 'Software\nHMA',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.white,
+                                          textPersetColor: Colors.white),
+                                      ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${itemPaket.totalPersen}',
+                                          title: 'SH\nVendor',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.white,
+                                          textPersetColor: Colors.white),
+                                      ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${itemPaket.totalPersenV}',
+                                          title: 'Software\nVendor',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.white,
+                                          textPersetColor: Colors.white),
+                                      ProgressCircleWidget(
+                                          totalPersenAll:
+                                              '${itemPaket.totalPersenHardV}',
+                                          title: 'Hardware\n',
+                                          fontSize: 12,
+                                          backgroundColor: Colors.white,
+                                          textPersetColor: Colors.white),
+                                    ],
+                                  ),
+                                ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  IconButton(
-                                    color: const Color(0xffffffff),
-                                    icon: const Icon(Icons.add_card_outlined),
-                                    onPressed: () {},
+                                  Tooltip(
+                                    message: "Tambah Modul",
+                                    child: IconButton(
+                                      color: const Color(0xffffffff),
+                                      icon: const Icon(Icons.add_card_outlined),
+                                      onPressed: () {
+                                        // print('tambah modul untuk paket');
+                                        context.go(
+                                            "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/tambahModulPaket/null",
+                                            extra: itemPaket);
+                                      },
+                                    ),
                                   ),
-                                  IconButton(
-                                    color: const Color(0xffffffff),
-                                    icon: const Icon(
-                                        Icons.remove_red_eye_outlined),
-                                    onPressed: () {
-                                      context.go(
-                                          "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITPAKET}/detail",
-                                          extra: item);
-                                    },
+                                  Tooltip(
+                                    message: 'Lihat Detail',
+                                    child: IconButton(
+                                      color: const Color(0xffffffff),
+                                      icon: const Icon(
+                                          Icons.remove_red_eye_outlined),
+                                      onPressed: () {
+                                        context.go(
+                                            "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITPAKET}/detail",
+                                            extra: itemPaket);
+                                      },
+                                    ),
                                   ),
-                                  IconButton(
-                                    color: const Color(0xffffffff),
-                                    icon: const Icon(Icons.edit_document),
-                                    onPressed: () {
-                                      context.go(
-                                          "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITPAKET}/edit",
-                                          extra: item);
-                                    },
+                                  Tooltip(
+                                    message: "Edit paket",
+                                    child: IconButton(
+                                      color: const Color(0xffffffff),
+                                      icon: const Icon(Icons.edit_document),
+                                      onPressed: () {
+                                        context.go(
+                                            "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITPAKET}/edit",
+                                            extra: itemPaket);
+                                      },
+                                    ),
                                   )
                                 ],
                               )
                             ],
                           ),
-                          content: Container(
+                          content: SizedBox(
                             height: 300,
-                            // padding: const EdgeInsets.all(8.0),
                             child: ListView.separated(
-                              itemCount: item.moduls!.length,
+                              itemCount: itemPaket.moduls!.length,
                               itemBuilder: (context, index) {
-                                return Text(item.moduls![index].modul!);
+                                if (index == 0) {
+                                  return Column(
+                                    children: [
+                                      const Text(
+                                        "Detail Module",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const Gap(10),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(itemPaket
+                                                .moduls![index].modul!),
+                                          ),
+                                          PopupMenuButton<String>(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: ColorApp
+                                                  .button, // Ganti warna titik tiga di sini
+                                            ),
+                                            color: Colors.white,
+                                            onSelected: (value) {
+                                              if (value == 'tambahmodul') {
+                                              } else if (value == 'detail') {
+                                                context.go(
+                                                    "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/detail/$index",
+                                                    extra: itemPaket);
+                                              } else if (value == 'edit') {
+                                                print("ini fungsi edit <==");
+                                                context.go(
+                                                    "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/edit/$index",
+                                                    extra: itemPaket);
+                                              }
+                                            },
+                                            itemBuilder: (context) => const [
+                                              // PopupMenuItem(
+                                              //   value: 'tambahmodul',
+                                              //   child: Row(
+                                              //     children: [
+                                              //       Icon(Icons.add_card_rounded,
+                                              //           color: Colors.blue),
+                                              //       SizedBox(width: 8),
+                                              //       Text("Tambah Sub Modul"),
+                                              //     ],
+                                              //   ),
+                                              // ),
+                                              PopupMenuItem(
+                                                value: 'detail',
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                        Icons
+                                                            .remove_red_eye_rounded,
+                                                        color: Colors.red),
+                                                    SizedBox(width: 8),
+                                                    Text("Detail"),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem(
+                                                value: 'edit',
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.edit_document,
+                                                        color: Colors.green),
+                                                    SizedBox(width: 8),
+                                                    Text("Edit"),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                }
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                      child:
+                                          Text(itemPaket.moduls![index].modul!),
+                                    ),
+                                    PopupMenuButton<String>(
+                                      icon: const Icon(
+                                        Icons.more_vert,
+                                        color: ColorApp
+                                            .button, // Ganti warna titik tiga di sini
+                                      ),
+                                      color: Colors.white,
+                                      onSelected: (value) {
+                                        if (value == 'tambahmodul') {
+                                        } else if (value == 'detail') {
+                                          print('ini fungsi detail');
+                                          context.go(
+                                              "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/detail/$index",
+                                              extra: itemPaket);
+                                        } else if (value == 'edit') {
+                                          print("ini fungsi edit <==");
+                                          context.go(
+                                              "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/edit/$index",
+                                              extra: itemPaket);
+                                        }
+                                      },
+                                      itemBuilder: (context) => const [
+                                        // PopupMenuItem(
+                                        //   value: 'tambahmodul',
+                                        //   child: Row(
+                                        //     children: [
+                                        //       Icon(Icons.add_card_rounded,
+                                        //           color: Colors.blue),
+                                        //       SizedBox(width: 8),
+                                        //       Text("Tambah Sub Modul"),
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                        PopupMenuItem(
+                                          value: 'detail',
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.remove_red_eye_rounded,
+                                                  color: Colors.red),
+                                              SizedBox(width: 8),
+                                              Text("Detail"),
+                                            ],
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 'edit',
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.edit_document,
+                                                  color: Colors.green),
+                                              SizedBox(width: 8),
+                                              Text("Edit"),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
                               },
                               separatorBuilder: (context, index) {
                                 return const Divider(
@@ -321,3 +517,8 @@ class MyInputForm extends StatelessWidget //__
 //       ],
 //     );
 //   }}
+
+// "total_persen_all": "87.55"
+// "total_persen": "89.02",
+// "total_persen_v": "89.89",
+// "total_persen_hard_v": "72.14",

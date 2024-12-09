@@ -6,6 +6,7 @@ abstract class Routes {
   static const MANAGEMENTUSERS = _Paths.MANAGEMENTUSERS;
   static const ADDEDITUSERSCREEN = _Paths.ADDEDITUSERSCREEN;
   static const ADDEDITPAKET = _Paths.ADDEDITPAKET;
+  static const ADDEDITMODUL = _Paths.ADDEDITMODUL;
 }
 
 abstract class _Paths {
@@ -16,4 +17,5 @@ abstract class _Paths {
   static const MANAGEMENTUSERS = 'managementUsers';
   static const ADDEDITUSERSCREEN = 'addEditUserScreen';
   static const ADDEDITPAKET = 'addEditPaket';
+  static const ADDEDITMODUL = 'addEditModul';
 }

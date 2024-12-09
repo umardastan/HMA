@@ -26,6 +26,10 @@ class PathUrl {
   static const updateUser = '/update-user/';
   static const createPaket = '/create-paket';
   static const updatePaket = '/update-paket/';
+  static const listSpecTech = '/list-spectech';
+  static const listModul = '/list-modul';
+  static const createModul = '/create-modul';
+  static const updateModul = '/update-modul/';
 }
 
 enum MessageType { success, error, warning, info }

@@ -216,4 +216,6 @@ class PaketCubit extends Cubit<PaketState> {
       emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
     }
   }
+
+  void deletePaket(DetailPaket item, BuildContext context) {}
 }

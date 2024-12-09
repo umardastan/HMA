@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/dar/dar_cubit.dart';
 import 'package:login/bloc/dashboard/dahsboard_cubit.dart';
 import 'package:login/bloc/management_user/management_user_cubit.dart';
+import 'package:login/bloc/modul/modul_cubit.dart';
 import 'package:login/bloc/paket/paket_cubit.dart';
 import 'package:login/bloc/profile/profile_cubit.dart';
+import 'package:login/bloc/spek_teknis/spek_teknis_cubit.dart';
 import 'package:login/router/app_routes.dart';
 import 'package:login/router/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        // KEBUTUHAN MODUL DAR
         BlocProvider(
           create: (context) => DashboardCubit(),
         ),
@@ -57,11 +60,18 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => PaketCubit(),
         ),
+        BlocProvider(
+          create: (context) => SpekTeknisCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ModulCubit(),
+        ),
         // BlocProvider(
         //   create: (_) => DarCubit()
         //     ..loadTasks(yourTasksList)
         //     ..checkDueDates(),
         // ),
+        // KEBUTUHAN MODUL DAR SAMPAI SINI
       ],
       child: MaterialApp.router(
         title: 'HMA App',
