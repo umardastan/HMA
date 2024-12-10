@@ -124,4 +124,37 @@ class SpekTeknisCubit extends Cubit<SpektekState> {
       emit(state.copyWith(filteredDataModul: tempData));
     }
   }
+
+  Future<void> deleteModul(Spektek item) async {
+    String? token = await Helper().getToken();
+
+    try {
+      var response = await Request.req(
+          path: "${PathUrl.deleteModul}${item.id}",
+          params: null,
+          body: null,
+          token: token,
+          method: 'delete');
+      var result = json.decode(response!.body);
+      print(response.statusCode);
+      print(result);
+      if (response.statusCode == 200 && result['success'] == true) {
+        emit(state.copyWith(
+            message: 'Delete Modul Berhasil',
+            titleMessage: 'Success',
+            typeMessage: 'success'));
+        emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
+      } else {
+        emit(state.copyWith(
+            message: 'Gagal Delete Modul',
+            titleMessage: 'Failed',
+            typeMessage: 'error'));
+        emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+          message: e.toString(), titleMessage: 'Failed', typeMessage: 'error'));
+      emit(state.copyWith(message: '', titleMessage: '', typeMessage: ''));
+    }
+  }
 }

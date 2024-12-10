@@ -1,6 +1,5 @@
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -160,7 +159,6 @@ class _PaketState extends State<Paket> {
                                       color: const Color(0xffffffff),
                                       icon: const Icon(Icons.add_card_outlined),
                                       onPressed: () {
-                                        // print('tambah modul untuk paket');
                                         context.go(
                                             "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/tambahModulPaket/null",
                                             extra: itemPaket);

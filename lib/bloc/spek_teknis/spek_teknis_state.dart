@@ -5,6 +5,9 @@ class SpektekState extends Equatable {
   final bool isLoading;
   final bool isSuccess;
   final String errorMessage;
+  final String message;
+  final String titleMessage;
+  final String typeMessage;
   final List<Spektek> listSpektek;
   final List<Spektek> filteredData;
   final List<Spektek> listModul;
@@ -14,6 +17,9 @@ class SpektekState extends Equatable {
     this.isLoading = false,
     this.isSuccess = false,
     this.errorMessage = '',
+    this.message = '',
+    this.titleMessage = '',
+    this.typeMessage = '',
     List<Spektek>? listSpektek,
     List<Spektek>? filteredData,
     List<Spektek>? listModul,
@@ -27,6 +33,9 @@ class SpektekState extends Equatable {
     bool? isLoading,
     bool? isSuccess,
     String? errorMessage,
+    String? message,
+    String? titleMessage,
+    String? typeMessage,
     List<Spektek>? listSpektek,
     List<Spektek>? filteredData,
     List<Spektek>? listModul,
@@ -36,6 +45,9 @@ class SpektekState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage ?? this.errorMessage,
+      message: message ?? this.message,
+      titleMessage: titleMessage ?? this.titleMessage,
+      typeMessage: typeMessage ?? this.typeMessage,
       listSpektek: listSpektek ?? this.listSpektek,
       filteredData: filteredData ?? this.filteredData,
       listModul: listModul ?? this.listModul,
@@ -48,6 +60,9 @@ class SpektekState extends Equatable {
         isLoading,
         isSuccess,
         errorMessage,
+        message,
+        titleMessage,
+        typeMessage,
         listSpektek,
         filteredData,
         listModul,

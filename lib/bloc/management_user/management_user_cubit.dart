@@ -397,8 +397,9 @@ class ManagementUserCubit extends Cubit<ManagementUserState> {
     ));
   }
 
-  void parsingDataSelectedPaket(Pakets paket) {
+  void parsingDataSelectedPaket(Pakets? paket) {
+    print('ini dari parsing data selected paket di managemen user cubit');
+    print(paket);
     emit(state.copyWith(selectedProjectLeader: paket));
   }
-
 }

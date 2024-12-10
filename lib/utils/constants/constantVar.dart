@@ -30,6 +30,7 @@ class PathUrl {
   static const listModul = '/list-modul';
   static const createModul = '/create-modul';
   static const updateModul = '/update-modul/';
+  static const deleteModul = '/delete-modul/';
 }
 
 enum MessageType { success, error, warning, info }

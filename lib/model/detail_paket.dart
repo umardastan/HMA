@@ -104,6 +104,9 @@ class DetailPaket {
     data['total_persen_all'] = totalPersenAll;
     return data;
   }
+
+  @override
+  String toString() => '{id: $id, kode_paket: $kodePaket, judul: $judul, tahun: $tahun, modul: $moduls}';
 }
 
 // CONTOH DATA DETAIL PAKET
@@ -230,7 +233,8 @@ class Moduls {
   }
 
   @override
-  String toString() => "{id: $id, paket_id: $paketId, jenis_module: $jenisModul, kode_modul: $kodeModul}";
+  String toString() =>
+      "{id: $id, paket_id: $paketId, jenis_module: $jenisModul, kode_modul: $kodeModul}";
 }
 
 // CONTOH DATA MODULS

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:login/bloc/spek_teknis/spek_teknis_cubit.dart';
 import 'package:login/bloc/spek_teknis/spek_teknis_state.dart';
-import 'package:login/utils/constants/colors.dart';
 
 class ListSpekTeknisPage extends StatefulWidget {
   const ListSpekTeknisPage({super.key});

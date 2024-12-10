@@ -7,19 +7,16 @@ import 'package:login/bloc/management_user/management_user_state.dart';
 import 'package:login/bloc/modul/modul_cubit.dart';
 import 'package:login/bloc/modul/modul_state.dart';
 import 'package:login/bloc/paket/paket_cubit.dart';
-import 'package:login/bloc/paket/paket_state.dart';
 import 'package:login/model/detail_paket.dart';
-import 'package:login/model/module.dart';
 import 'package:login/model/paket.dart';
 import 'package:login/model/role.dart';
-import 'package:login/screens/dar/components/dropdownPaket.dart';
 
 // Data model untuk UserType
 const userTypeList = ['Admin', 'User', 'Manager'];
 
 class AddEditModul extends StatefulWidget {
   final String type;
-  final Pakets paket;
+  final Pakets? paket;
   final Moduls? module;
   // final List<Pakets> listpaket;
 
@@ -55,13 +52,15 @@ class _AddEditModulState extends State<AddEditModul> {
         context.read<ModulCubit>().parsingDataModul(widget.module);
       }
     } else if (widget.type == 'tambahModulPaket') {
+      print('masuk type tambahModulPaket');
       context.read<ModulCubit>().parsingData(widget.paket);
       context
           .read<ManagementUserCubit>()
           .parsingDataSelectedPaket(widget.paket);
     } else {
-      // context.read<ManagementUserCubit>().resetForm();
-      // context.read<PaketCubit>().resetForm();
+      print('masuk reset form <==');
+      context.read<ManagementUserCubit>().resetForm();
+      context.read<ModulCubit>().resetForm();
     }
   }
 
@@ -98,7 +97,7 @@ class _AddEditModulState extends State<AddEditModul> {
                 : widget.type == 'detail'
                     ? 'Detail Modul'
                     : widget.type == 'tambahModulPaket'
-                        ? 'Tambah Modul Paket [${widget.paket.kodePaket}]'
+                        ? 'Tambah Modul Paket [${widget.paket?.kodePaket}]'
                         : 'Tambah Modul'),
           ),
           body: Padding(
@@ -109,6 +108,7 @@ class _AddEditModulState extends State<AddEditModul> {
                 children: [
                   // buildTextField('User ID', userIdController),
                   // Text(state.),
+                  Text(widget.type),
                   DropdownPaketModul(
                       isReadOnly: widget.type == 'detail',
                       label: "Pilih Paket"),
@@ -154,14 +154,14 @@ class _AddEditModulState extends State<AddEditModul> {
                               switch (widget.type) {
                                 case 'edit':
                                   print('fungsi edit dijalankan <==');
-                                  context
-                                      .read<ModulCubit>()
-                                      .updateModul(widget.paket,widget.module);
+                                  context.read<ModulCubit>().updateModul(
+                                      widget.paket ?? null, widget.module);
                                   break;
                                 case 'tambahModulPaket':
+                                  print('masuk fungsing saveModul');
                                   context
                                       .read<ModulCubit>()
-                                      .saveModul(widget.paket.id);
+                                      .saveModul(widget.paket?.id);
                                   break;
                                 default:
                               }

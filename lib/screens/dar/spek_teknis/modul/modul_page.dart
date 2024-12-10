@@ -1,9 +1,12 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:login/bloc/modul/modul_cubit.dart';
 import 'package:login/bloc/spek_teknis/spek_teknis_cubit.dart';
 import 'package:login/bloc/spek_teknis/spek_teknis_state.dart';
 import 'package:login/utils/constants/colors.dart';
+import 'package:login/utils/widget.dart';
 
 import '../../../../router/app_routes.dart';
 
@@ -29,7 +32,27 @@ class _ModulPageState extends State<ModulPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SpekTeknisCubit, SpektekState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.message.isNotEmpty &&
+            state.titleMessage.isNotEmpty &&
+            state.typeMessage.isNotEmpty) {
+          AwesomeDialog(
+            dismissOnTouchOutside: false,
+            context: context,
+            dialogType: state.typeMessage == 'success'
+                ? DialogType.success
+                : state.typeMessage == 'warning'
+                    ? DialogType.warning
+                    : DialogType.error,
+            animType: AnimType.topSlide,
+            title: state.titleMessage,
+            desc: state.message,
+            btnOkOnPress: () async {
+              context.read<SpekTeknisCubit>().initListModul(context);
+            },
+          ).show();
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           body: Column(
@@ -81,7 +104,10 @@ class _ModulPageState extends State<ModulPage> {
                                 return ListTile(
                                   leading: const CircleAvatar(
                                     backgroundColor: ColorApp.button,
-                                    child: Icon(Icons.description, color: Colors.white,),
+                                    child: Icon(
+                                      Icons.description,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   title: Text(
                                     kodeSpekTeknis,
@@ -104,17 +130,7 @@ class _ModulPageState extends State<ModulPage> {
                                     color: Colors.white,
                                     onSelected: (value) {
                                       if (value == 'tambahmodul') {
-                                        print('ini fungsi tambah modul');
-                                        // context.go(
-                                        //     "/${Routes.MAINPAGE}/${Routes.MANAGEMENTUSERS}/${Routes.ADDEDITUSERSCREEN}/edit",
-                                        //     extra: user);
-                                        // print(user);
-                                        // Tambahkan aksi edit di sini
                                       } else if (value == 'detail') {
-                                        // print('ini fungsi detail');
-                                        // context.go(
-                                        //     "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/detail",
-                                        //     extra: item);
                                         context.go(
                                             "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/detail/null",
                                             extra: item);
@@ -123,7 +139,21 @@ class _ModulPageState extends State<ModulPage> {
                                             "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/edit/null",
                                             extra: item);
                                       } else if (value == 'hapus') {
-                                        print("ini fungsi hapus");
+                                        AwesomeDialog(
+                                          dismissOnTouchOutside: false,
+                                          context: context,
+                                          dialogType: DialogType.warning,
+                                          animType: AnimType.topSlide,
+                                          title: "Peringatan !!!",
+                                          desc:
+                                              "Apakah anda yakin ingin menghapus ${item.modul}",
+                                          btnOkOnPress: () async {
+                                            context
+                                                .read<SpekTeknisCubit>()
+                                                .deleteModul(item);
+                                          },
+                                          btnCancelOnPress: () {},
+                                        ).show();
                                       }
                                     },
                                     itemBuilder: (context) => const [
@@ -188,8 +218,7 @@ class _ModulPageState extends State<ModulPage> {
             tooltip: 'Tambah Modul',
             onPressed: () {
               context.go(
-                  "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/tambah",
-                  extra: {"isEditing": true});
+                  "/${Routes.MAINPAGE}/${Routes.DAR}/${Routes.ADDEDITMODUL}/tambah/null");
             },
             child: const Icon(
               Icons.add_circle_outline,
